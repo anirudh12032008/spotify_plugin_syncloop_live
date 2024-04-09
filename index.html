@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify API Integration</title>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        Spotify API Integration with Syncloop
+    </h1>
+    <button class="button" onclick="callAPI('track','track_info_java.main')">Get Track Info</button>
+    <button class="button" onclick="callAPI('artist','artist_info_java.main')">Get Artist Info</button>
+    <button class="button" onclick="callAPI('album' ,'album_info_java.main')">Get Album Info</button>
+    <button class="button" onclick="callAPI('show','show_info.main')">Get Show Info</button>
+    <button class="button" onclick="callAPI('audiobooks','audiobook_info.main')">Get audiobook Info</button>
+    <button class="button" onclick="callAPI('categories','categories_info.main')">Get categories Info</button>
+    <button class="button" onclick="callAPI('chapters','chapters_info.main')">Get chapters Info</button>
+    <button class="button" onclick="callAPI('episodes','episode_info.main')">Get episodes Info</button>
+    <button class="button" onclick="callAPI('playlists','playlist_info.main')">Get playlists Info</button>
+
+    <div id="response"></div>
+
+
+    <script>
+        function callAPI(type, add) {
+            var bearerToken = "L1acjCJ7bU7Z37kPiCVG+8IHyu+DizNJM6YLy7dfX1DPF1JDao9FyiUKe9mcsOhdTHFga+OP4vkisQRfq82er7r8zDrSGH4wBBPgsZ4hs+N6Ot7nfTO7s1B3qZEgRh+4Yx666dojjWpyem13h2Fap/k+irY9ooV0fn/LJ8I+Gt9KnagUoueudeRUwDGLAVQ0cB1CGwsCjQVCxibU/QL1xvpWLQyyf7aS0tCWUj3jtO+aqoHOMFqqt1NfHlcP5ANA2/xAt9FuRY0tNSUeGZz9B43R3u3jkaFAG61YPCe4O9rf6wbFA3I+zgsZ458SxEB0kdC5WSMQvEBvWPRn1MLVgrIgUnhvBOHn6xOLTA6znlt7xJ2uPCuNfMYHWlbIoL9y8DQO7h+2gqcOZspnWrapbTVM2ULe4S5bbQnGdxcWMebJjyxaIH1Tx6WClODAQJCDPNvkNEzcL5VEIYkCEhKYgMHW25hC0ypln7IDezwGyDN0icjE67qc2Evk4uxZ+aL1nPdqOJpjFAJcwxPgepHzmx0NHFfCZJsBZ2xmxBPj8PNHNdqf1OWY4DT9MKt4Zi2NFiZh9WVWhkYbl3ytP+dc8hm1V5tGFbECNrYaboPnZYcl2n80S2VFOG/hmBPGVJ44tKWO4rsE33ioqnq1PbV9CqFrPcVck/wvcRexT5S9UEc="; // Replace with your actual bearer token
+            var parameterB = prompt("Enter the " + type.toUpperCase() + " ID:");
+            if (parameterB !== null) {
+                var apiUrl = "https://cloud.syncloop.com/tenant/anirudh/packages.Spotify_Plugin.api." + add; 
+                var parameterA = "BQCcfJHYJVu3nf9gFCVsQF63Kse-mRh9SnYm32xuNTwLAoCq_FJ6if6bKXUNGay2iS02rNDEToD0A2wjx4EFC9xbZgmxA_XWqygKaDva2Dq9Tk1qP6izlmNZq2zPhYEWzt15LGM1W7loopBEA-ZsNeebFqZdSMELZOyyOTr_MLU_sTGOkRuq62Q1ou_OZdXieu_tVJwyDzZ1ZETQ5GpLQjM6HKSfnWKCWNlaTru_ye_AgA3jVdJaNtbPmGz9VoUQPPuNrXzMZjFYqFR-d5iMCqRk"; // Constant parameter A
+                var queryParams = "?token=" + parameterA + `&${type}=` + parameterB;
+                fetch(apiUrl + queryParams, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + bearerToken
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); 
+                    document.getElementById('response').innerText = JSON.stringify(data.apiResponse, null, 4);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
